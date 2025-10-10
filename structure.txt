@@ -1,0 +1,30 @@
+microservices-project/
+│
+├─ crm-service/         # Handles customer CRUD
+│   ├─ src/
+│   ├─ pom.xml
+│   └─ Dockerfile
+│
+├─ user-service/        # Handles user auth/profile
+│   ├─ src/
+│   ├─ pom.xml
+│   └─ Dockerfile
+│
+├─ docker-compose.yml   # Orchestrates services
+└─ .env                 # Stores DB credentials
+
+
+
+
+
+
++------------------+       +------------------+       +------------------+
+|  crm-service     | <---> |  mysql-db        | <---> |  user-service    |
+|------------------|       |------------------|       |------------------|
+| REST Controller  |       | crm_db, user_db  |       | REST Controller  |
+| Service Layer    |       |                  |       | Service Layer    |
+| DAO Layer        |       |                  |       | DAO Layer        |
++------------------+       +------------------+       +------------------+
+
+
+

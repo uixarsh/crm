@@ -42,14 +42,14 @@ public class UserController {
 
   // Create new user
   @PostMapping
-  public ResponseEntity<UserResponseDTO> create(@Valid @RequestBody User userData) {
+  public ResponseEntity<?> create(@Valid @RequestBody User userData) {
+      if (service.findByEmail(userData.getEmail()).isPresent()) {
+          return ResponseEntity
+              .status(409) // HTTP 409 Conflict
+              .body("User with this email already exists");
+      }
       User savedUser = service.saveUser(userData);
-      UserResponseDTO response = UserResponseDTO.builder()
-              .id(savedUser.getId())
-              .username(savedUser.getUsername())
-              .email(savedUser.getEmail())
-              .role(savedUser.getRole())
-              .build();
+      UserResponseDTO response = service.getUserById(savedUser.getId());
       return ResponseEntity.ok(response);
   }
 

@@ -1,6 +1,7 @@
 package org.user.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -36,6 +37,11 @@ public class UserService {
   public void deleteUser(Long id) {
       repository.deleteById(id);
   }
+
+  public Optional<User> findByEmail(String email) {
+      return repository.findByEmail(email);
+  }
+
 
   private UserResponseDTO convertToDTO(User user) {
     return UserResponseDTO.builder()

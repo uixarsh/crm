@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.user.dto.UserResponseDTO;
 import org.user.entity.User;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
 
   private final UserRepository repository;
+  private final PasswordEncoder passwordEncoder;
 
   public List<UserResponseDTO> getAllUsers() {
     return repository.findAll()
@@ -31,7 +33,8 @@ public class UserService {
   }
 
   public User saveUser(User userData) {
-      return repository.save(userData);
+    userData.setPassword(passwordEncoder.encode(userData.getPassword()));
+    return repository.save(userData);
   }
 
   public void deleteUser(Long id) {
@@ -41,7 +44,6 @@ public class UserService {
   public Optional<User> findByEmail(String email) {
       return repository.findByEmail(email);
   }
-
 
   private UserResponseDTO convertToDTO(User user) {
     return UserResponseDTO.builder()

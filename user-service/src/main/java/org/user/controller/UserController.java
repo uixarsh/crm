@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.user.dto.UserResponseDTO;
 import org.user.entity.User;
 import org.user.service.UserService;
 
@@ -23,24 +24,39 @@ public class UserController {
 
   private final UserService service;
 
+  // Get all users 
   @GetMapping
-  public List<User> getUsers() { 
-    return service.getAllUsers(); 
+  public List<UserResponseDTO> getUsers() {
+      return service.getAllUsers();
   }
 
+  // Get one user by ID 
   @GetMapping("/{id}")
-  public User getById(@PathVariable Long id) { 
-    return service.getUserById(id); 
+  public ResponseEntity<UserResponseDTO> getById(@PathVariable Long id) {
+      UserResponseDTO user = service.getUserById(id);
+      if (user == null) {
+          return ResponseEntity.notFound().build();
+      }
+      return ResponseEntity.ok(user);
   }
 
+  // Create new user
   @PostMapping
-  public ResponseEntity<User> create(@Valid @RequestBody User user_data) {
-  User savedUser = service.saveUser(user_data);
-  return ResponseEntity.ok(savedUser);
+  public ResponseEntity<UserResponseDTO> create(@Valid @RequestBody User userData) {
+      User savedUser = service.saveUser(userData);
+      UserResponseDTO response = UserResponseDTO.builder()
+              .id(savedUser.getId())
+              .username(savedUser.getUsername())
+              .email(savedUser.getEmail())
+              .role(savedUser.getRole())
+              .build();
+      return ResponseEntity.ok(response);
   }
 
+  // Delete user by ID
   @DeleteMapping("/{id}")
-  public void delete(@PathVariable Long id) { 
-    service.deleteUser(id); 
+  public ResponseEntity<Void> delete(@PathVariable Long id) {
+      service.deleteUser(id);
+      return ResponseEntity.noContent().build();
   }
 }

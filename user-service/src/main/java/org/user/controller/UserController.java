@@ -2,7 +2,7 @@ package org.user.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.user.entity.User;
 import org.user.service.UserService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -20,8 +21,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserController {
 
-  @Autowired
-  private UserService service;
+  private final UserService service;
 
   @GetMapping
   public List<User> getUsers() { 
@@ -33,9 +33,15 @@ public class UserController {
     return service.getUserById(id); 
   }
 
+  // @PostMapping
+  // public User create(@RequestBody User user_data) { 
+  //   return service.saveUser(user_data); 
+  // }
+
   @PostMapping
-  public User create(@RequestBody User user_data) { 
-    return service.saveUser(user_data); 
+  public ResponseEntity<User> create(@Valid @RequestBody User user_data) {
+  User savedUser = service.saveUser(user_data);
+  return ResponseEntity.ok(savedUser);
   }
 
   @DeleteMapping("/{id}")

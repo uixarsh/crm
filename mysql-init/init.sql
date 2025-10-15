@@ -1,4 +1,0 @@
-CREATE DATABASE IF NOT EXISTS crm_db;
-CREATE DATABASE IF NOT EXISTS user_db;
-GRANT ALL PRIVILEGES ON crm_db.* TO 'admin'@'%';
-GRANT ALL PRIVILEGES ON user_db.* TO 'admin'@'%';

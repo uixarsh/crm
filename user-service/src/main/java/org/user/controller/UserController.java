@@ -33,11 +33,6 @@ public class UserController {
     return service.getUserById(id); 
   }
 
-  // @PostMapping
-  // public User create(@RequestBody User user_data) { 
-  //   return service.saveUser(user_data); 
-  // }
-
   @PostMapping
   public ResponseEntity<User> create(@Valid @RequestBody User user_data) {
   User savedUser = service.saveUser(user_data);
